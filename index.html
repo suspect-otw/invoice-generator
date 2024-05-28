@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alıcı Bilgileri Formu</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .ui-datepicker {
+            width: 450px;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="font-weight: bold;">
+        <form action="fatura_olustur.php" method="POST" onsubmit="return validateForm()">
+            <h2>Alıcı Bilgileri</h2>
+            <div class="form-group">
+                <label for="ad">Adınız</label>
+                <input type="text" id="ad" name="ad" required>
+            </div>
+            <div class="form-group">
+                <label for="soyad">Soyadınız</label>
+                <input type="text" id="soyad" name="soyad" required>
+            </div>
+            <div class="form-group">
+                <label for="tcno">TC Kimlik No</label>
+                <input type="text" id="tcno" name="tcno" required maxlength="11" pattern="\d{11}" title="11 haneli TC Kimlik No giriniz">
+            </div>
+            <div class="form-group">
+                <label for="telefon">Telefon Numaranız</label>
+                <input type="tel" id="telefon" name="telefon" required maxlength="11" pattern="\d{11}" title="11 haneli Telefon No giriniz">
+            </div>
+            <div class="form-group">
+                <label for="urun" style="font-weight: bold;">Araç Seçimi</label>
+                <select id="urun" name="urun">
+                    <option value="urun1">Renault Clio 2022</option>
+                    <option value="urun2">Volkswagen Golf 2023</option>
+                    <option value="urun3">Mercedes-Benz 2016</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="alistarihi">Alış Tarihi</label>
+                <input type="text" id="alistarihi" name="alistarihi" required>
+            </div>
+            <div class="form-group">
+                <label for="teslimtarihi">Teslim Tarihi</label>
+                <input type="text" id="teslimtarihi" name="teslimtarihi" required>
+            </div>
+            <div class="form-group">
+                <label for="ibanadsoyad">IBAN Ad-Soyad</label>
+                <input type="text" id="ibanadsoyad" name="ibanadsoyad" required>
+            </div>
+            <div class="form-group">
+                <label for="ibanno">IBAN</label>
+                <input type="text" id="ibanno" name="ibanno" required>
+            </div>
+            <div class="form-group">
+                <label for="nameofbank">Banka</label>
+                <input type="text" id="nameofbank" name="nameofbank" required>
+            </div>
+            <div class="form-group" style="display: block; padding: 0 0 0 0;">
+                <label for="kiratipi">Kiralama Tipi:</label><br>
+                <input type="radio" id="gunluk" name="kiratipi" value="gunluk" checked>
+                <label for="gunluk">Günlük Kiralama</label><br>
+                <input type="radio" id="aylik" name="kiratipi" value="aylik">
+                <label for="aylik">Aylık Kiralama</label><br>
+                <input type="number" id="indirimYuzdesi" name="indirimYuzdesi" placeholder="İndirim Yüzdesi" min="0" max="99" style="display:none;">
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Faturayı Oluştur">
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/i18n/datepicker-tr.js"></script>
+    <script>
+        $(function() {
+            $("#alistarihi").datepicker({
+                dateFormat: "dd-mm-yy",
+                regional: "tr"
+            });
+            $("#teslimtarihi").datepicker({
+                dateFormat: "dd-mm-yy",
+                regional: "tr"
+            });
+        });
+
+        function validateForm() {
+            var tcno = document.getElementById("tcno").value;
+            var telefon = document.getElementById("telefon").value;
+
+            if (tcno.length !== 11 || isNaN(tcno)) {
+                alert("TC Kimlik No 11 haneli ve sadece rakamlardan oluşmalıdır.");
+                return false;
+            }
+
+            if (telefon.length !== 11 || isNaN(telefon)) {
+                alert("Telefon numarası 11 haneli ve sadece rakamlardan oluşmalıdır.");
+                return false;
+            }
+
+            return true;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+        var gunlukRadio = document.getElementById('gunluk');
+        var aylikRadio = document.getElementById('aylik');
+        var indirimYuzdesiInput = document.getElementById('indirimYuzdesi');
+
+        gunlukRadio.addEventListener('change', function() {
+            if (gunlukRadio.checked) {
+                indirimYuzdesiInput.style.display = 'none';
+                indirimYuzdesiInput.value = ''; // Reset input value when hidden
+            }
+        });
+
+        aylikRadio.addEventListener('change', function() {
+            if (aylikRadio.checked) {
+                indirimYuzdesiInput.style.display = 'inline';
+            }
+        });
+    });
+   
+    
+    </script>
+</body>
+</html>
